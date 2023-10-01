@@ -1,3 +1,11 @@
+const readline = require("readline");
+const _ = require("lodash"); // Import lodash
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
 // Character
 // name
 // health
@@ -5,10 +13,11 @@
 // inventory (array)
 
 class Character {
-  constructor(name, health, attackPower) {
+  constructor(name, health, attackPower, heldItem) {
     this.name = name;
     this.health = health;
     this.attackPower = attackPower;
+    this.heldItem = heldItem;
     this.inventory = []; // inventory (array)
   }
 
@@ -52,22 +61,22 @@ let choice = "3";
 
 switch (choice) {
   case "1":
-    playerCharacter = new Character("Barbarian", 120, 80);
     defaultItem = new item("bigAxe", "weapon", 40);
+    playerCharacter = new Character("Barbarian", 120, 80, defaultItem);
     break;
   case "2":
-    playerCharacter = new Character("Hero", 90, 65);
     defaultItem = new item("Sword", "weapon", 28);
+    playerCharacter = new Character("Hero", 90, 65, defaultItem);
     break;
   case "3":
-    playerCharacter = new Character("Mage", 70, 50);
     defaultItem = new item("Staff", "healing", 17);
+    playerCharacter = new Character("Mage", 70, 50, defaultItem);
     break;
 }
 
-if (playerCharacter && defaultItem) {
-  playerCharacter.pickUpItem(defaultItem);
-}
+// if (playerCharacter && defaultItem) {
+//   playerCharacter.pickUpItem(defaultItem);
+// }
 
 let listOfEnemys = [
   { name: "Goblin", health: 250, attackPower: 25, enemy: "1" },
@@ -99,12 +108,28 @@ let availableItems = [
   { name: "Spiked Whip", type: "weapon", value: 35, itemNum: "3" },
 ];
 
-function changeItems() {
-  viewInventory();
-  defaultItem = selecledItem;
-}
+// function changeItems(itemNum) {
+//   viewInventory();
+//   defaultItem = selecledItem;
+// }
 
-function changeItem(itemNum) {
+function changeItem() {
+  viewInventory();
+
+  rl.question("Please enter the item you want to use: ", (itemNum) => {
+    const selectedItem = inventory.find((item) => item.itemNum === itemNum);
+
+    if (selectedItem && selectedItem.type === "weapon") {
+      playerCharacter.pickUpItem(playerCharacter.heldItem);
+      // Update the defaultItem to the newly selected item
+      heldItem = selectedItem;
+
+      console.log(`You have equipped ${heldItem.name}.`);
+    } else {
+      console.log("Invalid item selection or item is not a weapon.");
+    }
+    rl.close(); // Close the interface to allow the script to exit
+  });
   // Find the selected item from availableItems based on itemNum
   const selectedItem = inventory.find((item) => item.itemNum === itemNum);
 
@@ -167,3 +192,8 @@ class location {
 // enterLocation()
 // searchLocation()
 // move(newLocation)
+
+rl.question("Please enter something: ", (answer) => {
+  console.log(`You entered: ${answer}`);
+  rl.close(); // Close the interface to allow the script to exit
+});
