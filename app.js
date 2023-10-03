@@ -74,10 +74,6 @@ switch (choice) {
     break;
 }
 
-// if (playerCharacter && defaultItem) {
-//   playerCharacter.pickUpItem(defaultItem);
-// }
-
 let listOfEnemys = [
   { name: "Goblin", health: 250, attackPower: 25, enemy: "1" },
   { name: "wildBoar", health: 350, attackPower: 30, enemy: "2" },
@@ -112,6 +108,74 @@ let availableItems = [
 //   viewInventory();
 //   defaultItem = selecledItem;
 // }
+let location1 = {
+  location: "Cave",
+  desc: "Wet and dark. Be careful not to slip or trip.",
+  enemy: (listOfEnemys.name = "Goblin"),
+};
+
+enterLocation(location1);
+
+function enterLocation(location1) {
+  console.log("You are now entering the " + location1.name);
+  console.log(
+    "A few hours into your quest you encountered a " + location1.enemy
+  );
+  fightEnemy(location1.enemy);
+}
+
+function RandomIntFight() {
+  return Math.floor(Math.random() * (101 - 1)) + 1;
+}
+
+function RandomIntItems() {
+  return Math.floor(Math.random() * (4 - 1)) + 1;
+}
+
+function getItems(RandomItems) {
+  return availableItems.find((items) => items.itemNum === RandomItems);
+}
+
+function fightEnemy(enemy) {
+  rl.question("Do you want to fight this enemy (Y/N): ", (choice) => {
+    if (choice === "Y") {
+      if (RandomIntFight() > 25) {
+        let RandomItems = RandomIntItems();
+        let item = getItems(RandomItems);
+        console.log("You won and slayed that " + enemy);
+        console.log("You've gain an item from your fight: " + item);
+        playerCharacter.pickUpItem(item);
+      } else {
+        console.log("You did not survived that fight againt " + enemy);
+        playagain();
+      }
+    } else {
+      if (RandomIntFight() > 25) {
+        console.log(
+          "You were not able to run away from " + enemy + " and died."
+        );
+        playagain();
+      } else {
+        console.log("You got away from the " + enemy + " .");
+      }
+    }
+  });
+}
+
+function moveLocation(location2) {
+  rl.question(
+    "Would you like to leave the " +
+      location2 +
+      " and move to the new area? (Y/N)",
+    (choice) => {
+      if (choice === "Y") {
+        enterLocation(location2);
+      } else {
+        console.log("let's wander some more.");
+      }
+    }
+  );
+}
 
 function changeItem() {
   viewInventory();

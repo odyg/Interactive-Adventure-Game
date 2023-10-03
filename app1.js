@@ -1,66 +1,68 @@
-class Character {
-  constructor(name, health, attackPower) {
-    this.name = name;
-    this.health = health;
-    this.attackPower = attackPower;
-    this.inventory = []; // inventory (array)
-  }
+const readline = require("readline");
+const _ = require("lodash"); // Import lodash
 
-  attack(target) {
-    target.takeDamage(this.attackPower); // Call the target's takeDamage method
-  }
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
-  takeDamage(amount) {
-    this.health -= amount; // Deduct the 'amount' from the character's health
-  }
+let availableItems = [
+  { name: "ninjaStar", type: "weapon", value: 15, itemNum: "1" },
+  { name: "Mace", type: "weapon", value: 45, itemNum: "2" },
+  { name: "Spiked Whip", type: "weapon", value: 35, itemNum: "3" },
+];
 
-  pickUpItem(item) {
-    this.inventory.push(item); // Add the item to the character's inventory
-  }
+let location1 = {
+  location: "Cave",
+  desc: "Wet and dark. Be careful not to slip or trip.",
+  enemy: "Goblin",
+};
 
-  viewInventory() {
-    this.inventory.forEach((element) => {
-      console.log(element);
-    });
-  }
+enterLocation(location1);
+
+function enterLocation(location1) {
+  console.log("You are now entering the " + location1.location);
+  console.log(
+    "A few hours into your quest you encountered a " + location1.enemy
+  );
+  fightEnemy(location1.enemy);
 }
 
-class Item {
-  constructor(name, type, value) {
-    this.name = name;
-    this.type = type;
-    this.value = value;
-  }
+function RandomIntFight() {
+  return Math.floor(Math.random() * (101 - 1)) + 1;
 }
 
-// Create characters and items based on user choice
-let playerCharacter;
-let item;
-let choice = "1";
-switch (choice) {
-  case "1":
-    playerCharacter = new Character("Barbarian", 120, 80);
-    item = new Item("Big Axe", "Weapon", 40);
-    break;
-  case "2":
-    playerCharacter = new Character("Hero", 90, 65);
-    item = new Item("Sword", "Weapon", 28);
-    break;
-  case "3":
-    playerCharacter = new Character("Necromancer", 70, 50);
-    item = new Item("Staff", "Healing", 17);
-    break;
-  default:
-    console.log("Invalid choice");
-    break;
+function RandomIntItems() {
+  return Math.floor(Math.random() * (4 - 1)) + 1;
 }
 
-// Add the chosen item to the character's inventory
-if (playerCharacter && item) {
-  playerCharacter.pickUpItem(item);
+function getItems(RandomItems) {
+  return availableItems.find((items) => items.itemNum === RandomItems);
 }
 
-// Example usage
-console.log(playerCharacter);
-playerCharacter.attack(someEnemy); // You need to define 'someEnemy' or target
-playerCharacter.viewInventory();
+function fightEnemy(enemy) {
+  rl.question("Do you want to fight this enemy (Y/N): ", (choice) => {
+    let ans = choice.toUpperCase();
+    if (ans === "Y") {
+      if (RandomIntFight() > 25) {
+        let RandomItems = RandomIntItems();
+        let item = getItems(RandomItems);
+        console.log("You won and slayed that " + enemy);
+        console.log(item);
+        playerCharacter.pickUpItem(item);
+      } else {
+        console.log("You did not survive that fight against the " + enemy);
+        playagain();
+      }
+    } else {
+      if (RandomIntFight() > 25) {
+        console.log(
+          "You were not able to run away from " + enemy + " and died."
+        );
+        playagain();
+      } else {
+        console.log("You got away from the " + enemy + ".");
+      }
+    }
+  });
+}
