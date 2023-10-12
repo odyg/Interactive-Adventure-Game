@@ -230,19 +230,50 @@
         </p> -->
         <div class="typing-container lead">
           <span id="typed-text"></span>
-          <span id="cursor"></span>
+          <p id="cursor"></p>
         </div>
         <br />
         <!-- <button id="showButton" style="display: none">Show Button</button> -->
         <p class="lead">
-          <a
+          <button
             href="#"
             id="showButton"
             class="btn btn-lg btn-light fw-bold border-white bg-white"
             style="display: none"
             onclick="nextText()"
-            >next</a
           >
+            next
+          </button>
+          <button
+            href="#"
+            id="choice1"
+            class="btn btn-lg btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value="1"
+            onclick="PickChoice(1)"
+          >
+            1
+          </button>
+          <button
+            href="#"
+            id="choice2"
+            class="btn btn-lg btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value="2"
+            onclick="PickChoice(2)"
+          >
+            2
+          </button>
+          <button
+            href="#"
+            id="choice3"
+            class="btn btn-lg btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value="3"
+            onclick="PickChoice(3)"
+          >
+            3
+          </button>
         </p>
       </main>
 
@@ -255,6 +286,7 @@
       </footer>
     </div>
     <script src="UI.js"></script>
+    <script src="lodash.js"></script>
     <script src="bootstrap.bundle.min.js"></script>
   </body>
 </html>
