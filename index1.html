@@ -238,7 +238,7 @@
           <button
             href="#"
             id="showButton"
-            class="btn btn-lg btn-light fw-bold border-white bg-white"
+            class="btn btn-md btn-light fw-bold border-white bg-white"
             style="display: none"
             onclick="nextText()"
           >
@@ -247,7 +247,7 @@
           <button
             href="#"
             id="choice1"
-            class="btn btn-lg btn-light fw-bold border-white bg-white choices"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
             style="display: none"
             value="1"
             onclick="PickChoice(1)"
@@ -257,7 +257,7 @@
           <button
             href="#"
             id="choice2"
-            class="btn btn-lg btn-light fw-bold border-white bg-white choices"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
             style="display: none"
             value="2"
             onclick="PickChoice(2)"
@@ -267,12 +267,58 @@
           <button
             href="#"
             id="choice3"
-            class="btn btn-lg btn-light fw-bold border-white bg-white choices"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
             style="display: none"
             value="3"
             onclick="PickChoice(3)"
           >
             3
+          </button>
+          <button
+            href="#"
+            id="continuebtn"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value="1"
+            onclick="enterLocation(area1)"
+          >
+            continue
+          </button>
+          <button
+            href="#"
+            id="fightButton"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value=""
+          >
+            Fight
+          </button>
+          <button
+            href="#"
+            id="runButton"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value=""
+          >
+            Run
+          </button>
+          <button
+            href="#"
+            id="continueplay"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value=""
+          >
+            continue
+          </button>
+          <button
+            href="#"
+            id="playAgain"
+            class="btn btn-md btn-light fw-bold border-white bg-white choices"
+            style="display: none"
+            value=""
+          >
+            play again
           </button>
         </p>
       </main>
@@ -286,7 +332,10 @@
       </footer>
     </div>
     <script src="UI.js"></script>
-    <script src="lodash.js"></script>
+    <script
+      type="text/JavaScript"
+      src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"
+    ></script>
     <script src="bootstrap.bundle.min.js"></script>
   </body>
 </html>

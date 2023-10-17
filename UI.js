@@ -4,11 +4,11 @@ const showButton = document.getElementById("showButton");
 let currentIndex = 0;
 
 var introText = [
-  "The world stretches out before you, a vast tapestry of ancient lands and untold mysteries. In this realm, where legends and myths intertwine, a tale of great significance is about to unfold—the legend of the Lost Relic.",
-  "You find yourself standing at the precipice of a grand adventure, one that will test your courage, wit, and determination. As the sun dips below the horizon, casting long shadows across the land, destiny beckons you forth.",
-  "The air is thick with anticipation, and the very ground beneath your feet seems to tremble with the weight of the unknown. Your journey will lead you through a land of wonders and perils, where choices made and battles fought will shape your destiny.",
-  "But who are you in this story? What path will you tread? The answers lie in your choice of character—a choice that will define your journey. Select your character wisely, for their abilities will be your greatest assets on this epic quest.",
-  "Will you take up the mantle of the Barbarian, whose strength is unmatched, wielding a mighty axe that cleaves through adversity?",
+  // "The world stretches out before you, a vast tapestry of ancient lands and untold mysteries. In this realm, where legends and myths intertwine, a tale of great significance is about to unfold—the legend of the Lost Relic.",
+  // "You find yourself standing at the precipice of a grand adventure, one that will test your courage, wit, and determination. As the sun dips below the horizon, casting long shadows across the land, destiny beckons you forth.",
+  // "The air is thick with anticipation, and the very ground beneath your feet seems to tremble with the weight of the unknown. Your journey will lead you through a land of wonders and perils, where choices made and battles fought will shape your destiny.",
+  // "But who are you in this story? What path will you tread? The answers lie in your choice of character—a choice that will define your journey. Select your character wisely, for their abilities will be your greatest assets on this epic quest.",
+  // "Will you take up the mantle of the Barbarian, whose strength is unmatched, wielding a mighty axe that cleaves through adversity?",
   "Perhaps you'll become the Hero, a beacon of hope, skilled with a sharp sword and the unwavering resolve to protect the innocent?",
   "Or will you embrace the arcane arts as the Mage, capable of harnessing healing magic and wielding a mystical staff that hums with ancient power? \n",
 ];
@@ -115,8 +115,32 @@ function pickChar(choice) {
   choice1.style.display = "none";
   choice2.style.display = "none";
   choice3.style.display = "none";
-  enterLocation(location); // Close the interface to exit the script
+  continuebtn.style.display = "inline-block";
+  //enterLocation(location); // Close the interface to exit the script
 }
+
+// function pickLocation(num) {
+//   let locationobj = _.find(locations, function (item) {
+//     if (item.locationNum == num) {
+//       return item;
+//     }
+//   });
+//   return locationobj;
+// }
+// var currentLocation = pickLocation(currentLocationIndex);
+
+// var location = pickLocation(currentLocationIndex);
+
+function PickYesNo(x) {
+  return x === 1 ? "Y" : "N";
+}
+
+var area1 = {
+  location: "Cave",
+  desc: "Wet and dark. Be careful not to slip or trip.",
+  enemy: "Goblin",
+  locationNum: 1,
+};
 
 let locations = [
   {
@@ -146,13 +170,27 @@ var availableItems = [
 ];
 
 function enterLocation(location) {
+  continuebtn.style.display = "none";
   cursorElement.innerHTML = "";
   textElement.innerHTML = "";
-  cursorElement.innerHTML = "You are now entering the " + location.location;
-  textElement.innerHTML =
-    "A few hours into your quest you encountered a " + location.enemy;
+  console.log(location);
+  textElement.innerHTML = "You are now entering the " + location.location;
+  cursorElement.innerHTML =
+    "A few hours into your quest you encountered a " + location.enemy + "<br/>";
+  cursorElement.innerHTML += "Do you want to fight this enemy?";
+  fightButton.style.display = "inline-block";
+  runButton.style.display = "inline-block";
+
   //fightEnemy(location.enemy);
 }
+
+document.getElementById("fightButton").addEventListener("click", function () {
+  handleFightChoice();
+});
+
+document.getElementById("runButton").addEventListener("click", function () {
+  handleRunChoice();
+});
 
 function RandomIntFight() {
   return Math.floor(Math.random() * (101 - 1)) + 1;
@@ -160,6 +198,53 @@ function RandomIntFight() {
 
 function RandomIntItems() {
   return Math.floor(Math.random() * (4 - 1)) + 1;
+}
+
+function handleFightChoice() {
+  fightButton.style.display = "none";
+  runButton.style.display = "none";
+  if (RandomIntFight() > 1) {
+    let RandomItems = RandomIntItems();
+    let item = _.find(availableItems, function (item) {
+      return item.itemNum === RandomItems;
+    });
+    cursorElement.innerHTML = "";
+    textElement.innerHTML = "";
+    textElement.innerHTML = "You won and slayed that " + area1.enemy;
+    cursorElement.innerHTML = "Weapon gained: " + item.name;
+    playerCharacter.pickUpItem(item);
+    continueplay.style.display = "inline-block";
+
+    // if (currentLocationIndex === 3) {
+    //   console.log("Congratulations! You've saved the village from the Golem.");
+    //   console.log("Thanks for playing.");
+    // } else {
+    //   cursorElement.innerHTML = "Weapon gained: " + item.name;
+    //   playerCharacter.pickUpItem(item);
+    //   // moveLocation();
+    // }
+  } else {
+    console.log("You did not survive that fight against the " + area1.enemy);
+    playAgain.style.display = "inline-block";
+    // playagain();
+  }
+}
+
+function handleRunChoice() {
+  // Handle the logic for choosing to run.
+  if (RandomIntFight() < 25) {
+    console.log(
+      "You were not able to run away from the " + enemy + " and died."
+    );
+    playagain();
+  } else {
+    console.log("You got away from the " + enemy + ".");
+    if (currentLocationIndex === 3) {
+      enterLocation(location);
+    } else {
+      moveLocation();
+    }
+  }
 }
 
 function fightEnemy(enemy) {
@@ -247,12 +332,4 @@ function moveLocation() {
   });
 }
 
-function pickLocation(num) {
-  let location = _.find(locations, function (item) {
-    return item.locationNum == num;
-  });
-
-  return location;
-}
-
-var location = pickLocation(currentLocationIndex);
+// var location = pickLocation(currentLocationIndex);
