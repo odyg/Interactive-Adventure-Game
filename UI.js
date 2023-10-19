@@ -1,27 +1,27 @@
+// Get references to various HTML elements
 const textElement = document.getElementById("typed-text");
 const cursorElement = document.getElementById("cursor");
 const showButton = document.getElementById("showButton");
-let currentIndex = 0;
+const endGameText = document.getElementById("endGame");
+const dropDown = document.getElementById("dropdownbtn");
 
+// Initialize variables
+let currentIndex = 0;
+var tryAgain = 0;
+
+// An array containing introductory text
 var introText = [
-  // "The world stretches out before you, a vast tapestry of ancient lands and untold mysteries. In this realm, where legends and myths intertwine, a tale of great significance is about to unfold—the legend of the Lost Relic.",
-  // "You find yourself standing at the precipice of a grand adventure, one that will test your courage, wit, and determination. As the sun dips below the horizon, casting long shadows across the land, destiny beckons you forth.",
-  // "The air is thick with anticipation, and the very ground beneath your feet seems to tremble with the weight of the unknown. Your journey will lead you through a land of wonders and perils, where choices made and battles fought will shape your destiny.",
-  // "But who are you in this story? What path will you tread? The answers lie in your choice of character—a choice that will define your journey. Select your character wisely, for their abilities will be your greatest assets on this epic quest.",
-  // "Will you take up the mantle of the Barbarian, whose strength is unmatched, wielding a mighty axe that cleaves through adversity?",
-  "Perhaps you'll become the Hero, a beacon of hope, skilled with a sharp sword and the unwavering resolve to protect the innocent?",
-  "Or will you embrace the arcane arts as the Mage, capable of harnessing healing magic and wielding a mystical staff that hums with ancient power? \n",
+  "The world stretches out before you, a vast tapestry of ancient lands and untold mysteries. In this realm, where legends and myths intertwine, a tale of great significance is about to unfold—the legend of the Lost Relic.",
+  "Embark on an epic journey in a world steeped in legend and mystery. As the sun sets, destiny calls. \n",
 ];
 var introTextCount = 0;
+
+// Function to type the introductory text
 function typeText() {
   var textToType = introText[introTextCount];
-  console.log(textToType);
-  if (currentIndex < textToType.length) {
-    textElement.innerHTML += textToType.charAt(currentIndex);
-    currentIndex++;
-    setTimeout(typeText, 20); // Adjust typing speed (milliseconds)
-  } else if (introTextCount + 1 == introText.length) {
-    // Text typing animation is complete, show the button
+  textElement.innerHTML = textToType;
+
+  if (introTextCount + 1 == introText.length) {
     cursorElement.innerHTML =
       "<p><b>Who are you in this story?</b></p>" +
       "<p><b>Barbarian (1), Hero (2) or Mage (3)</b></p>";
@@ -34,8 +34,10 @@ function typeText() {
   }
 }
 
-typeText(); // Start the typing animation
+// Start the introductory text animation
+typeText();
 
+// Function to move to the next text
 function nextText() {
   textElement.innerHTML = "";
   introTextCount++;
@@ -43,12 +45,13 @@ function nextText() {
   typeText();
 }
 
+// Function to handle user's choice of character
 function PickChoice(userChoice) {
   var choice = userChoice;
   pickChar(choice);
 }
 
-// Call the PickChoice function to set up the event listeners
+// Define the Character class
 class Character {
   constructor(name, health, attackPower, heldItem) {
     this.name = name;
@@ -57,21 +60,26 @@ class Character {
     this.heldItem = heldItem;
     this.inventory = []; // inventory (array)
   }
+
+  // Function to decrease character's health
   takeDamage(amount) {
     this.health -= amount;
   }
 
+  // Function to pick up an item and add it to the inventory
   pickUpItem(item) {
     this.inventory.push(item);
   }
 
+  // Function to view the character's inventory
   viewInventory() {
-    inventory.forEach((element) => {
+    this.inventory.forEach((element) => {
       console.log(element);
     });
   }
 }
 
+// Define the item class
 class item {
   constructor(name, type, value) {
     this.name = name;
@@ -80,10 +88,12 @@ class item {
   }
 }
 
-let playerCharacter;
+// Initialize variables for character and default item
+var playerCharacter;
 let defaultItem;
 var currentLocationIndex = 1;
 
+// Function to select a character based on user choice
 function pickChar(choice) {
   switch (choice) {
     case 1:
@@ -116,25 +126,9 @@ function pickChar(choice) {
   choice2.style.display = "none";
   choice3.style.display = "none";
   continuebtn.style.display = "inline-block";
-  //enterLocation(location); // Close the interface to exit the script
 }
 
-// function pickLocation(num) {
-//   let locationobj = _.find(locations, function (item) {
-//     if (item.locationNum == num) {
-//       return item;
-//     }
-//   });
-//   return locationobj;
-// }
-// var currentLocation = pickLocation(currentLocationIndex);
-
-// var location = pickLocation(currentLocationIndex);
-
-function PickYesNo(x) {
-  return x === 1 ? "Y" : "N";
-}
-
+// Define different game locations
 var area1 = {
   location: "Cave",
   desc: "Wet and dark. Be careful not to slip or trip.",
@@ -142,35 +136,33 @@ var area1 = {
   locationNum: 1,
 };
 
-let locations = [
-  {
-    location: "Cave",
-    desc: "Wet and dark. Be careful not to slip or trip.",
-    enemy: "Goblin",
-    locationNum: 1,
-  },
-  {
-    location: "Forest",
-    desc: "Over-grown grass and bushes. This forest is covered in old trees. Watch out for those wild boars.",
-    enemy: "Wild Boar",
-    locationNum: 2,
-  },
-  {
-    location: "Rocky Plains",
-    desc: "In the vast plains, golems take on a different form. They appear as living earth, with bodies made of fertile soil and grass.",
-    enemy: "Golem",
-    locationNum: 3,
-  },
-];
+var area2 = {
+  location: "Forest",
+  desc: "Over-grown grass and bushes. This forest is covered in old trees. Watch out for those wild boars.",
+  enemy: "Wild Boar",
+  locationNum: 2,
+};
 
+var area3 = {
+  location: "Rocky Plains",
+  desc: "In the vast plains, golems take on a different form. They appear as living earth, with bodies made of fertile soil and grass.",
+  enemy: "Golem",
+  locationNum: 3,
+};
+
+// Define available items in the game
 var availableItems = [
   { name: "Ninja Star", type: "weapon", value: 15, itemNum: 1 },
   { name: "Mace", type: "weapon", value: 45, itemNum: 2 },
   { name: "Spiked Whip", type: "weapon", value: 35, itemNum: 3 },
 ];
 
+// Function to enter a game location
 function enterLocation(location) {
+  playAgain.style.display = "none";
+  exit.style.display = "none";
   continuebtn.style.display = "none";
+  continueplay.style.display = "none";
   cursorElement.innerHTML = "";
   textElement.innerHTML = "";
   console.log(location);
@@ -180,156 +172,182 @@ function enterLocation(location) {
   cursorElement.innerHTML += "Do you want to fight this enemy?";
   fightButton.style.display = "inline-block";
   runButton.style.display = "inline-block";
+  document.getElementById("fightButton").addEventListener("click", function () {
+    handleFightChoice(location);
+  });
 
-  //fightEnemy(location.enemy);
+  document.getElementById("runButton").addEventListener("click", function () {
+    handleRunChoice(location);
+  });
 }
 
-document.getElementById("fightButton").addEventListener("click", function () {
-  handleFightChoice();
-});
-
-document.getElementById("runButton").addEventListener("click", function () {
-  handleRunChoice();
-});
-
+// Function to generate a random integer for fighting outcomes
 function RandomIntFight() {
   return Math.floor(Math.random() * (101 - 1)) + 1;
 }
 
+// Function to generate a random integer for item outcomes
 function RandomIntItems() {
   return Math.floor(Math.random() * (4 - 1)) + 1;
 }
 
-function handleFightChoice() {
+// Function to handle the user's choice to fight an enemy
+function handleFightChoice(location) {
+  playAgain.style.display = "none";
+  exit.style.display = "none";
   fightButton.style.display = "none";
   runButton.style.display = "none";
-  if (RandomIntFight() > 1) {
+  if (RandomIntFight() > 40) {
     let RandomItems = RandomIntItems();
     let item = _.find(availableItems, function (item) {
       return item.itemNum === RandomItems;
     });
     cursorElement.innerHTML = "";
     textElement.innerHTML = "";
-    textElement.innerHTML = "You won and slayed that " + area1.enemy;
+    textElement.innerHTML = "You won and slayed that " + location.enemy;
     cursorElement.innerHTML = "Weapon gained: " + item.name;
-    playerCharacter.pickUpItem(item);
-    continueplay.style.display = "inline-block";
-
-    // if (currentLocationIndex === 3) {
-    //   console.log("Congratulations! You've saved the village from the Golem.");
-    //   console.log("Thanks for playing.");
-    // } else {
-    //   cursorElement.innerHTML = "Weapon gained: " + item.name;
-    //   playerCharacter.pickUpItem(item);
-    //   // moveLocation();
-    // }
-  } else {
-    console.log("You did not survive that fight against the " + area1.enemy);
-    playAgain.style.display = "inline-block";
-    // playagain();
-  }
-}
-
-function handleRunChoice() {
-  // Handle the logic for choosing to run.
-  if (RandomIntFight() < 25) {
-    console.log(
-      "You were not able to run away from the " + enemy + " and died."
-    );
-    playagain();
-  } else {
-    console.log("You got away from the " + enemy + ".");
-    if (currentLocationIndex === 3) {
-      enterLocation(location);
+    if (!playerCharacter.inventory.includes(item)) {
+      // If it doesn't exist, push it
+      playerCharacter.pickUpItem(item);
     } else {
-      moveLocation();
+      // Item already exists, handle it as needed (e.g., show a message)
+      console.log("Item already exists in the array");
     }
-  }
-}
+    // playerCharacter.pickUpItem(item);
+    console.log(playerCharacter.inventory);
+    if (location.locationNum == 3) {
+      cursorElement.innerHTML = "";
+      textElement.innerHTML = "";
+      continueplay.style.display = "none";
+      exit.style.display = "none";
+      endGameText.innerHTML =
+        "Congratulations! You've defeated the " +
+        location.enemy +
+        " and retrieved the Lost Relic.";
+      exit.style.display = "inline-block";
+    } else {
+      continueplay.style.display = "inline-block";
 
-function fightEnemy(enemy) {
-  rl.question("Do you want to fight this enemy (Y/N): ", (choice) => {
-    let ans = choice.toUpperCase();
-    if (ans === "Y") {
-      if (RandomIntFight() > 25) {
-        let RandomItems = RandomIntItems();
-        let item = _.find(availableItems, function (item) {
-          return item.itemNum == RandomItems;
+      document
+        .getElementById("continueplay")
+        .addEventListener("click", function () {
+          continueplay.style.display = "none";
+          nextLocation(location);
         });
-        console.log("You won and slayed that " + enemy);
+    }
+  } else {
+    textElement.innerHTML =
+      "You did not survive that fight against the " + location.enemy;
+    tryAgain++;
+    if (tryAgain == 4) {
+      cursorElement.innerHTML =
+        "You died " + tryAgain + " times. You'll have to start over again.";
+      setTimeout(function () {}, 2500);
+    } else {
+      cursorElement.innerHTML = "";
+      playAgain.style.display = "inline-block";
+      exit.style.display = "inline-block";
+      continueplay.style.display = "none";
 
-        if (currentLocationIndex === 3) {
-          console.log(
-            "Congratulations! You've saved the village from the Golem."
-          );
-          console.log("Thanks for playing.");
-          rl.close();
-        } else {
-          console.log("Weapon gained: " + item.name);
-          playerCharacter.pickUpItem(item);
-          moveLocation();
-        }
-      } else {
-        console.log("You did not survive that fight against the " + enemy);
-        playagain();
-      }
-    } else {
-      if (RandomIntFight() < 25) {
-        console.log(
-          "You were not able to run away from the " + enemy + " and died."
-        );
-        playagain();
-      } else {
-        console.log("You got away from the " + enemy + ".");
-        if (currentLocationIndex === 3) {
-          enterLocation(location);
-        } else {
-          moveLocation();
-        }
-      }
+      document
+        .getElementById("playAgain")
+        .addEventListener("click", function () {
+          playagain(location);
+        });
     }
-  });
-}
-var tryAgain = 1;
-function playagain() {
-  rl.question("Would you like to play again?: (Y/N)", (choice1) => {
-    let ans = choice1.toUpperCase();
-    if (ans === "Y") {
-      tryAgain++;
-      if (tryAgain > 3) {
-        currentLocationIndex = 1;
-        location = pickLocation(currentLocationIndex);
-        console.log(
-          "You've died more than 3 times in this level. Best for you to start over at the " +
-            location.location
-        );
-        enterLocation(location);
-      } else {
-        enterLocation(location);
-      }
-      currentLocationIndex = 0;
-      enterLocation(location);
-    } else {
-      console.log("Thanks for playing.");
-      rl.close();
-    }
-  });
+  }
 }
 
-function moveLocation() {
-  rl.question("Would you like to go to the next level?: (Y/N)", (choice2) => {
-    let ans = choice2.toUpperCase();
-    if (ans === "Y") {
-      // var nextlocation = pickLocation(currentLocationIndex + 1);
-      currentLocationIndex++;
-      location = pickLocation(currentLocationIndex);
-      enterLocation(location);
-      // enterLocation(location);
+// Function to handle the user's choice to run away from an enemy
+function handleRunChoice(location) {
+  fightButton.style.display = "none";
+  runButton.style.display = "none";
+  playAgain.style.display = "none";
+  exit.style.display = "none";
+
+  if (RandomIntFight() > 40) {
+    textElement.innerHTML = "";
+    cursorElement.innerHTML = "";
+    textElement.innerHTML =
+      "You were not able to run away from the " + location.enemy + " and died.";
+    tryAgain++;
+    if (tryAgain == 4) {
+      cursorElement.innerHTML =
+        "You died " + tryAgain + " times. You'll have to start over again.";
+      setTimeout(function () {}, 2500);
     } else {
-      // currentLocationIndex = 0;
-      enterLocation(location);
+      playAgain.style.display = "inline-block";
+      exit.style.display = "inline-block";
+      continueplay.style.display = "none";
+
+      document
+        .getElementById("playAgain")
+        .addEventListener("click", function () {
+          playagain(location);
+        });
     }
-  });
+  } else {
+    textElement.innerHTML = "You got away from the " + location.enemy + ".";
+    cursorElement.innerHTML = "";
+    continueplay.style.display = "inline-block";
+    document
+      .getElementById("continueplay")
+      .addEventListener("click", function () {
+        continueplay.style.display = "none";
+        nextLocation(location);
+      });
+  }
 }
 
-// var location = pickLocation(currentLocationIndex);
+// Event listener for exiting the game
+document.getElementById("exit").addEventListener("click", function () {
+  exitGame();
+});
+
+// Function to restart the game after a defeat
+function playagain(location) {
+  enterLocation(location);
+}
+
+// Function to exit the game
+function exitGame() {
+  playAgain.style.display = "none";
+  exit.style.display = "none";
+  textElement.innerHTML = "Thanks for playing.";
+}
+
+// Function to move to the next location in the game
+function nextLocation(location) {
+  textElement.innerHTML = "";
+  cursorElement.innerHTML = "";
+  textElement.innerHTML = "You are now walking to the next location.";
+  setTimeout(function () {
+    if (location.locationNum == 1) {
+      enterLocation(area2);
+    } else if (location.locationNum == 2) {
+      enterLocation(area3);
+    }
+  }, 2500);
+}
+
+// Function to toggle the display of the character's inventory
+function toggleDisplay() {
+  var inventoryList = document.getElementById("inventoryList");
+  if (inventoryList.style.display === "none") {
+    inventoryList.style.display = "block";
+    displayInventory();
+  } else {
+    inventoryList.style.display = "none";
+  }
+}
+
+// Function to display the character's inventory
+function displayInventory() {
+  inventoryList.innerHTML = "<h4>Inventory:</h4>";
+
+  playerCharacter.inventory.forEach((item) => {
+    const itemElement = document.createElement("p");
+    itemElement.innerHTML = item.name;
+    inventoryList.appendChild(itemElement);
+  });
+}
